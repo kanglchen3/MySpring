@@ -1,23 +1,38 @@
 package main.java.com.kangle.thread;
 
+import jdk.nashorn.internal.ir.CallNode;
+
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 class MyData{
-    int number = 0;
+    volatile int number = 0;
     public void addTo60(){
         this.number = 60;
     }
     public void addPlusPlus() { number++; }
+    AtomicInteger atomicInteger = new AtomicInteger();
+    public void addMyAtomic() { atomicInteger.getAndIncrement();}
 }
 
 public class VolatileDemo {
     public static void main(String[] args) {
+        atomicOfVolatile();
+//        ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
+//        map.put("Lucy", "great");
+//        map.put("Tom", "bad");
+//        System.out.println(map.entrySet());
+    }
+
+    private static void atomicOfVolatile() {
         System.out.println(Thread.activeCount());
         MyData myData = new MyData();
         for (int i = 0; i < 20; i++) {
             new Thread(()->{
                 for (int j = 0; j < 1000; j++) {
                     myData.addPlusPlus();
+                    myData.addMyAtomic();
                 }
             }, String.valueOf(i)).start();
         }
@@ -29,6 +44,7 @@ public class VolatileDemo {
             Thread.yield();
         }
         System.out.println(Thread.currentThread().getName()+"\t finally number value: " + myData.number);
+        System.out.println(Thread.currentThread().getName()+"\t AtomicInteger type, finally number value: " + myData.atomicInteger);
 //        try{
 //            TimeUnit.SECONDS.sleep(5);
 //        } catch (InterruptedException e) {
