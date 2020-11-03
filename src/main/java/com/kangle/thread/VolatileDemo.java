@@ -1,8 +1,5 @@
 package main.java.com.kangle.thread;
 
-import jdk.nashorn.internal.ir.CallNode;
-
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -18,11 +15,28 @@ class MyData{
 
 public class VolatileDemo {
     public static void main(String[] args) {
-        atomicOfVolatile();
+//        atomicOfVolatile();
 //        ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
 //        map.put("Lucy", "great");
 //        map.put("Tom", "bad");
 //        System.out.println(map.entrySet());
+
+
+
+
+
+        //单线程单例模式调用
+//        System.out.println(SingletonDemo.getInstance() == SingletonDemo.getInstance());
+//        System.out.println(SingletonDemo.getInstance() == SingletonDemo.getInstance());
+//        System.out.println(SingletonDemo.getInstance() == SingletonDemo.getInstance());
+//        System.out.println("===========================");
+
+        //并发多线程的情况
+        for (int i = 1; i < 10; i++) {
+            new Thread(()->{
+                SingletonDemo.getInstance();
+            }, String.valueOf(i)).start();
+        }
     }
 
     private static void atomicOfVolatile() {
@@ -69,4 +83,5 @@ public class VolatileDemo {
 
         System.out.println(Thread.currentThread().getName() + "\t mission is over. updated number is " + myData.number);
     }
+
 }
