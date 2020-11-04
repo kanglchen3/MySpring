@@ -22,9 +22,6 @@ public class VolatileDemo {
 //        System.out.println(map.entrySet());
 
 
-
-
-
         //单线程单例模式调用
 //        System.out.println(SingletonDemo.getInstance() == SingletonDemo.getInstance());
 //        System.out.println(SingletonDemo.getInstance() == SingletonDemo.getInstance());
@@ -32,11 +29,13 @@ public class VolatileDemo {
 //        System.out.println("===========================");
 
         //并发多线程的情况
-        for (int i = 1; i < 10; i++) {
-            new Thread(()->{
-                SingletonDemo.getInstance();
-            }, String.valueOf(i)).start();
-        }
+//        for (int i = 1; i < 10; i++) {
+//            new Thread(()->{
+//                SingletonDemo.getInstance();
+//            }, String.valueOf(i)).start();
+//        }
+        AtomicInteger atomicInteger = new AtomicInteger();
+        atomicInteger.getAndIncrement();
     }
 
     private static void atomicOfVolatile() {

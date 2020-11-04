@@ -62,7 +62,12 @@ volatile: 只保证可见性，禁止指令重排（保证有序性），但是�
    2. 手写读写锁
    3. CAS  ouc包
    
-cas: 比较并交换
+cas: 比较并交换 compare and swap
+    自旋锁  
+    unsafe类: cas的核心类，由于java方法无法直接访问底层系统，需要通过本地 native 方法来访问，unsafe相当于以一个后门，基于该类可以直接操作特定内存的数据。
+              Unsafe诶存在于sun.misc包中，其内部方法操作可以像C的指针一样直接操作内存，因为java中cas操作的执行依赖于unsafe类的方法
+                    unsafe.getAndAddInt(this, valueoffset, 1); this:对象本身， valueoffset，内存偏移地址
+              unsafe类的方法是一种系统原语，在执行过程中不允许被中断，也就是说cas是一条cpu的原子指令。不会造成所谓的数据不一致问题      
  
 synchronized: 
        
