@@ -8,13 +8,17 @@ class MyData{
     public void addTo60(){
         this.number = 60;
     }
-    public void addPlusPlus() { number++; }
+    public void addPlusPlus() { number=number++; }
+    public void addedPlusPlus() { number=++number; }
     AtomicInteger atomicInteger = new AtomicInteger();
     public void addMyAtomic() { atomicInteger.getAndIncrement();}
 }
 
 public class VolatileDemo {
     public static void main(String[] args) {
+//        MyData myData = new MyData();
+//        myData.addedPlusPlus();
+//        System.out.println(myData.number);
 //        atomicOfVolatile();
 //        ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
 //        map.put("Lucy", "great");
@@ -34,8 +38,31 @@ public class VolatileDemo {
 //                SingletonDemo.getInstance();
 //            }, String.valueOf(i)).start();
 //        }
-        AtomicInteger atomicInteger = new AtomicInteger();
-        atomicInteger.getAndIncrement();
+//        AtomicInteger atomicInteger = new AtomicInteger();
+//        atomicInteger.getAndIncrement();
+
+
+        //不同类型的 类加载器
+
+        //获取系统类加载器
+        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+        System.out.println(systemClassLoader); //sun.misc.Launcher$AppClassLoader@18b4aac2
+
+        //获取标准扩展类加载器
+        ClassLoader extClassLoader = systemClassLoader.getParent();
+        System.out.println(extClassLoader); //sun.misc.Launcher$ExtClassLoader@1540e19d
+
+        //上层无法获取启动引导类加载器
+        ClassLoader bootstrapClassLoader = extClassLoader.getParent();
+        System.out.println(bootstrapClassLoader);  //null
+
+        //对于用户自定义类来说：默认使用系统类加载器进行加载
+        ClassLoader classLoader = VolatileDemo.class.getClassLoader();
+        System.out.println(classLoader);  //sun.misc.Launcher$AppClassLoader@18b4aac2
+
+        //系统核心类 如  String类使用引导类加载器进行加载的
+        ClassLoader classLoader1 = String.class.getClassLoader();
+        System.out.println(classLoader);  //null
     }
 
     private static void atomicOfVolatile() {
